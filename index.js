@@ -12,7 +12,8 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use('/post', apprenantsRoute);
 app.use('/', apprenantsRoute);
-app.use('/delete/id', apprenantsRoute);
+app.use('/delete', apprenantsRoute);
+app.use('/:id', apprenantsRoute);
 
 
 

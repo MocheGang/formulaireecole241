@@ -66,3 +66,26 @@ export const getApprenants = async (req, res) => {
     }
   };
 
+
+
+  export const getApprenantById = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        // Récupérer l'apprenant par son ID
+        const apprenant = await prisma.apprenants.findUnique({
+            where: { id_apprenant: id },
+        });
+
+        // Si l'apprenant n'existe pas, renvoyer une erreur 404
+        if (!apprenant) {
+            return res.status(404).json({ message: "Apprenant non trouvé" });
+        }
+
+        // Retourner les informations de l'apprenant
+        res.status(200).json(apprenant);
+    } catch (error) {
+        console.error("Erreur lors de la récupération de l'apprenant :", error);
+        res.status(500).json({ error: "Erreur lors de la récupération de l'apprenant" });
+    }
+};
