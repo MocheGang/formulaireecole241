@@ -89,3 +89,39 @@ export const getApprenants = async (req, res) => {
         res.status(500).json({ error: "Erreur lors de la récupération de l'apprenant" });
     }
 };
+
+
+
+export const updateApprenant = async (req, res) => {
+    const { id } = req.params;
+    const { nom, prenom, date_de_naissance, email, telephone, referentielId } = req.body;
+
+    try {
+        // Vérifiez si l'apprenant existe
+        const apprenant = await prisma.apprenants.findUnique({
+            where: { id_apprenant: id },
+        });
+
+        if (!apprenant) {
+            return res.status(404).json({ message: "Apprenant non trouvé" });
+        }
+
+        // Mettre à jour l'apprenant
+        const updatedApprenant = await prisma.apprenants.update({
+            where: { id_apprenant: id },
+            data: {
+                nom,
+                prenom,
+                date_de_naissance: new Date(date_de_naissance), // Assurez-vous que le format de la date est correct
+                email,
+                telephone,
+                referentielId,
+            },
+        });
+
+        res.status(200).json(updatedApprenant);
+    } catch (error) {
+        console.error("Erreur lors de la mise à jour de l'apprenant :", error);
+        res.status(500).json({ error: "Erreur lors de la mise à jour de l'apprenant" });
+    }
+};
